@@ -1,0 +1,90 @@
+
+<html>
+  <body>
+    <canvas id="myCanvas" width="501" height="501"></canvas>
+    <button onclick="move('start')">start</button>
+    <button onclick="move('left')">left</button>
+    <button onclick="move('right')">right</button>
+    <button onclick="move('up')">up</button>
+    <button onclick="move('down')">down</button>
+  </body>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+    
+    // Начальные позиции линий
+    var verticalLinePositions = [40, 110, 200, 300, 390, 460];
+    var horizontalLinePositions = [220, 250, 300, 400, 500];
+    
+    // Изменение позиции линий
+    function updateLinePositions(direction) {
+      // логика обновления позиций линий в зависимости от направления
+      if (direction === 'left') {
+        // Двигать вертикальные линии влево
+        // Например, изменять каждую позицию на -5
+        for (var i = 0; i < verticalLinePositions.length; i++) {
+          verticalLinePositions[i] -= 5;
+          // Проверка границ и ресет позиции
+          if (verticalLinePositions[i] < 0) {
+            verticalLinePositions[i] = canvas.width;
+          }
+        }
+      } else if (direction === 'right') {
+        // Двигать вертикальные линии вправо
+        for (var i = 0; i < verticalLinePositions.length; i++) {
+          verticalLinePositions[i] += 5;
+          if (verticalLinePositions[i] > canvas.width) {
+            verticalLinePositions[i] = 0;
+          }
+        }
+      } else if (direction === 'up') {
+        // Двигать горизонтальные линии вверх
+        for (var i = 0; i < horizontalLinePositions.length; i++) {
+          horizontalLinePositions[i] -= 5;
+          if (horizontalLinePositions[i] < 0) {
+            horizontalLinePositions[i] = canvas.height;
+          }
+        }
+      } else if (direction === 'down') {
+        // Двигать горизонтальные линии вниз
+        for (var i = 0; i < horizontalLinePositions.length; i++) {
+          horizontalLinePositions[i] += 5;
+          if (horizontalLinePositions[i] > canvas.height) {
+            horizontalLinePositions[i] = 0;
+          }
+        }
+      }
+      
+      drawLines(); // Вызывать функцию отрисовки линий с обновленным положением
+    }
+
+    function drawLines() {
+      context.clearRect(0, 0, canvas.width, canvas.height); // Очистка канваса
+      // Отрисовка вертикальных линий
+      for (var i = 0; i < verticalLinePositions.length; i++) {
+        context.beginPath();
+        context.moveTo(verticalLinePositions[i], 0);
+        context.lineTo(verticalLinePositions[i], canvas.height);
+        context.strokeStyle = "red";
+        context.stroke();
+      }
+      
+      // Отрисовка горизонтальных линий
+      for (var i = 0; i < horizontalLinePositions.length; i++) {
+        context.beginPath();
+        context.moveTo(0, horizontalLinePositions[i]);
+        context.lineTo(canvas.width, horizontalLinePositions[i]);
+        context.strokeStyle = "red";
+        context.stroke();
+      }
+    }
+    
+    function move(direction) {
+      if (direction === 'start') {
+        drawLines(); // Просто отрисовать линии
+      } else {
+        updateLinePositions(direction);
+      }
+    }
+  </script>
+</html>
