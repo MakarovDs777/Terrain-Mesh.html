@@ -1,0 +1,104 @@
+<html>
+  <body>
+    <canvas id="myCanvas" width="501" height="501"></canvas>
+    <button onclick="move('start')">start</button>
+    <button onclick="move('left')">left</button>
+    <button onclick="move('right')">right</button>
+    <button onclick="move('up')">up</button>
+    <button onclick="move('down')">down</button>
+  </body>
+  <script>
+    var canvas = document.getElementById("myCanvas");
+    var context = canvas.getContext("2d");
+
+    // Количество вертикальных и горизонтальных линий
+    var verticalLineCount = 6;
+    var horizontalLineCount = 6;
+
+    // Рассчитать равные промежутки между линиями
+    var verticalLineSpacing = canvas.width / (verticalLineCount + 1);
+    var horizontalLineSpacing = canvas.height / (horizontalLineCount + 1);
+
+    // Начальные позиции линий
+    var verticalLinePositions = [];
+    var horizontalLinePositions = [];
+
+    for (var i = 0; i <= verticalLineCount; i++) {
+      verticalLinePositions.push(i * verticalLineSpacing);
+    }
+
+    for (var i = 0; i <= horizontalLineCount; i++) {
+      horizontalLinePositions.push(i * horizontalLineSpacing);
+    }
+
+    // Изменение позиции линий
+    function updateLinePositions(direction) {
+      // логика обновления позиций линий в зависимости от направления
+      if (direction === 'left') {
+        // Двигать вертикальные линии влево
+        for (var i = 0; i < verticalLinePositions.length; i++) {
+          verticalLinePositions[i] -= 5;
+          // Проверка границ и ресет позиции
+          if (verticalLinePositions[i] < 0) {
+            verticalLinePositions[i] = canvas.width;
+          }
+        }
+      } else if (direction === 'right') {
+        // Двигать вертикальные линии вправо
+        for (var i = 0; i < verticalLinePositions.length; i++) {
+          verticalLinePositions[i] += 5;
+          if (verticalLinePositions[i] > canvas.width) {
+            verticalLinePositions[i] = 0;
+          }
+        }
+      } else if (direction === 'up') {
+        // Двигать горизонтальные линии вверх
+        for (var i = 0; i < horizontalLinePositions.length; i++) {
+          horizontalLinePositions[i] -= 5;
+          if (horizontalLinePositions[i] < 0) {
+            horizontalLinePositions[i] = canvas.height;
+          }
+        }
+      } else if (direction === 'down') {
+        // Двигать горизонтальные линии вниз
+        for (var i = 0; i < horizontalLinePositions.length; i++) {
+          horizontalLinePositions[i] += 5;
+          if (horizontalLinePositions[i] > canvas.height) {
+            horizontalLinePositions[i] = 0;
+          }
+        }
+      }
+
+      drawLines(); // Вызывать функцию отрисовки линий с обновленным положением
+    }
+
+    function drawLines() {
+      context.clearRect(0, 0, canvas.width, canvas.height); // Очистка канваса
+      // Отрисовка вертикальных линий
+      for (var i = 0; i < verticalLinePositions.length; i++) {
+        context.beginPath();
+        context.moveTo(verticalLinePositions[i], 0);
+        context.lineTo(verticalLinePositions[i], canvas.height);
+        context.strokeStyle = "red";
+        context.stroke();
+      }
+
+      // Отрисовка горизонтальных линий
+      for (var i = 0; i < horizontalLinePositions.length; i++) {
+        context.beginPath();
+        context.moveTo(0, horizontalLinePositions[i]);
+        context.lineTo(canvas.width, horizontalLinePositions[i]);
+        context.strokeStyle = "red";
+        context.stroke();
+      }
+    }
+
+    function move(direction) {
+      if (direction === 'tart') {
+        drawLines(); // Просто отрисовать линии
+      } else {
+        updateLinePositions(direction);
+      }
+    }
+  </script>
+</html>
